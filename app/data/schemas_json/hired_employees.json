@@ -1,0 +1,33 @@
+[
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "mode": "REQUIRED",
+      "description": "Id of the employee"
+    },
+    {
+      "name": "name",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "Name and surname of the employee"
+    },
+    {
+        "name": "datetime",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "Hire datetime in ISO format"
+      },
+      {
+        "name": "department_id",
+        "type": "INTEGER",
+        "mode": "REQUIRED",
+        "description": "Id of the department which the employee was hired for"
+      },
+      {
+        "name": "job_id",
+        "type": "INTEGER",
+        "mode": "REQUIRED",
+        "description": "Id of the job which the employee was hired for"
+      }
+    
+]

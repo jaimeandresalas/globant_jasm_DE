@@ -1,0 +1,10 @@
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
+
+WORKDIR /code
+COPY ./requirements.txt /code/requirements.txt
+COPY ./main.py /code/main.py
+COPY ./sql_app /code/sql_app
+COPY ./data/schemas_json /code/data/schemas_json
+
+RUN pip install --upgrade pip
+RUN pip install -r /code/requirements.txt

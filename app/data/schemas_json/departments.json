@@ -1,0 +1,14 @@
+[
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "mode": "REQUIRED",
+      "description": "Id of the departament"
+    },
+    {
+      "name": "departament",
+      "type": "STRING",
+      "mode": "REQUIRED",
+      "description": "Name of the departament"
+    }
+]

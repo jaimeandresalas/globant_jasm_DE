@@ -1,0 +1,49 @@
+name: Deploy to Cloud Run
+
+on: 
+  push:
+    branches:
+      - master
+      - develop
+    paths: 
+      - "app/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+          cleanup_credentials: false
+      #Setups the gcloud CLI
+      - name: Set up Cloud SDK 
+        uses: google-github-actions/setup-gcloud@v1
+
+      
+      # Configure docker to use the gcloud command-line tool as a credential helper
+      - name: Authorize Docker push 
+        run: gcloud auth configure-docker
+      
+      
+      #Build the container and push it to Google Container Registry
+      - name: Build and Push Container
+        run: |-
+          cd app_mvp
+          docker build -t gcr.io/abi-martech-maz-mex/spotlight-1 .
+          docker tag gcr.io/abi-martech-maz-mex/spotlight-1 gcr.io/abi-martech-maz-mex/spotlight-1
+          docker push gcr.io/abi-martech-maz-mex/spotlight-1
+
+      #Deploy the container to Cloud Run
+      - name: Deploy to Cloud Run with gcloud 
+        run: |-
+          gcloud run deploy spotlight-1 \
+          --region us-central1 \
+          --image gcr.io/abi-martech-maz-mex/spotlight-1 \
+          --platform managed \
+          --allow-unauthenticated
