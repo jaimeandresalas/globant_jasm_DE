@@ -11,7 +11,7 @@ async def root():
     return {"message": "Hello World from FastAPI and GCP Cloud Run!"}
 
 @app.post("/write_csv")
-def write_csv():
+async def write_csv():
     dataset_id = "gentle-coyote-378216.globant_de"
     # Set the GCS URI for the CSV file
     uri_departments = "gs://bucket1_jasm_globant/backup_csv/departments.csv"
@@ -27,12 +27,15 @@ def write_csv():
     #schema_hired_employee = "gs://bucket1_jasm_globant/backup_csv/schemas_json/jobs.json"
     schema_departments = "data/schemas_json/departments.json"
     schema_jobs = "data/schemas_json/jobs.json"
-    schema_hired_employee = "data/schemas_json/hired_employee.json"
+    schema_hired_employee = "data/schemas_json/hired_employees.json"
     # Write the CSV files to BigQuery
     try:
         write_csv_to_bigquery(uri_departments, dataset_id, table_id_departments, schema_departments)
+        print("Departments inserted successfully")
         write_csv_to_bigquery(uri_jobs, dataset_id, table_id_jobs, schema_jobs)
+        print("Jobs inserted successfully")
         write_csv_to_bigquery(uri_hired_employee, dataset_id, table_id_hired_employee, schema_hired_employee)
+        print("Hired Employee inserted successfully")
     except Exception as e:
         print(e)
         return {"message": "Error inserting CVS files to BigQuery"}
