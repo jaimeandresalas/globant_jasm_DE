@@ -26,10 +26,7 @@ async def write_csv():
     table_id_departments = "departments"
     table_id_jobs = "jobs"
     table_id_hired_employee = "hired_employee"
-    # Set the schema path for the tables 
-    #schema_departments = "gs://bucket1_jasm_globant/backup_csv/schemas_json/departments.json"
-    #schema_jobs = "gs://bucket1_jasm_globant/backup_csv/schemas_json/jobs.json"
-    #schema_hired_employee = "gs://bucket1_jasm_globant/backup_csv/schemas_json/jobs.json"
+    # Set the schema path for the tables to be created
     schema_departments = "data/schemas_json/departments.json"
     schema_jobs = "data/schemas_json/jobs.json"
     schema_hired_employee = "data/schemas_json/hired_employees.json"
