@@ -1,7 +1,10 @@
 from google.cloud import bigquery
 from google.cloud import storage
 import io
+#import fastavro
 from datetime import datetime
+import pandas as pd
+
 
 
 def backup_table(table_id):
@@ -9,6 +12,8 @@ def backup_table(table_id):
     client = bigquery.Client()
     table = client.get_table(table_id)
     rows = client.list_rows(table)
+    rows_2 = rows.to_arrow()
+    df = rows.to_dataframe()
     print(f"Rows in table {table_id}: {table.num_rows}")
     # Crear un cliente de Storage y obtener una referencia al bucket
     storage_client = storage.Client()
@@ -21,8 +26,8 @@ def backup_table(table_id):
     output = io.BytesIO()
 
     # Escribir los datos en formato AVRO en el objeto BytesIO
-    for row in rows:
-        output.write(row.to_arrow().to_pybytes())
+    for row in rows_2:
+        output.write(row.to_pybytes())
 
     # Crear el nombre del archivo a partir del nombre de la tabla y la fecha actual
     table_name = table.table_id
