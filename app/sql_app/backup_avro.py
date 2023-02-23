@@ -6,13 +6,16 @@ def export_table_to_avro(table_id, bucket_name):
     #dataset_ref = client.dataset(dataset_id, project=project)
     #table_ref = dataset_ref.table(table_id)
     table_ref = table_id
+    print(table_ref)
 
     job_config = bigquery.job.ExtractJobConfig()
     job_config.destination_format = bigquery.DestinationFormat.AVRO
     table_name = table_id.split(".")[-1]
     current_date = datetime.today().strftime('%Y-%m-%d')
     filename = f"{current_date}_{table_name}.avro"
+    print(filename)
     destination_uri = 'gs://{}/{}'.format(bucket_name, filename)
+    print(destination_uri)
     extract_job = client.extract_table(
         table_ref,
         destination_uri,

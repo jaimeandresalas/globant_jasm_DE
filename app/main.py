@@ -7,6 +7,7 @@ from pydantic import ValidationError
 from google.cloud import bigquery
 import pandas as pd
 from sql_app.backup_avro import export_table_to_avro
+from datetime import datetime
 
 app = FastAPI()
 
@@ -105,7 +106,32 @@ async def backup_avro(table_name :str):
     else:
         return {"error": "Invalid table name"}
     try: 
-        export_table_to_avro(table_id,bucket_name)
+        print("Exporting table to avro")
+        print(table_id)
+        client = bigquery.Client()
+        #dataset_ref = client.dataset(dataset_id, project=project)
+        #table_ref = dataset_ref.table(table_id)
+        table_ref = table_id
+        print(table_ref)
+        job_config = bigquery.job.ExtractJobConfig()
+        job_config.destination_format = bigquery.DestinationFormat.AVRO
+        table_name = table_id.split(".")[-1]
+        current_date = datetime.today().strftime('%Y-%m-%d')
+        filename = f"{current_date}_{table_name}.avro"
+        print(filename)
+        destination_uri = 'gs://{}/{}'.format(bucket_name, filename)
+        print(destination_uri)
+        extract_job = client.extract_table(
+            table_ref,
+            destination_uri,
+            job_config=job_config,
+            location="EU",
+            )  
+        extract_job.result()    
+        print('Exported {} to {}'.format(table_id, destination_uri))
+        
+        #print()
+        #export_table_to_avro(table_id,bucket_name)
     except Exception as e:
         print(e)
         return {"message": "Error backing up table"}
