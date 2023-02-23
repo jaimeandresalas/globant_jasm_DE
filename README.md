@@ -23,5 +23,5 @@ This repository is used to create an MVP for an app or data source that you want
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/globant-jasm-data-engineer.git
+git clone https://github.com/jaimeandresalas/globant_jasm_DE.git
 
