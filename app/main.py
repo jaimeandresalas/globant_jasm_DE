@@ -119,7 +119,7 @@ async def backup_avro(table_name :str):
         current_date = datetime.today().strftime('%Y-%m-%d')
         filename = f"{current_date}_{table_name}.avro"
         print(filename)
-        destination_uri = 'gs://{}/{}'.format(bucket_name, filename)
+        destination_uri = '{}/{}'.format(bucket_name, filename)
         print(destination_uri)
         extract_job = client.extract_table(
             table_ref,
