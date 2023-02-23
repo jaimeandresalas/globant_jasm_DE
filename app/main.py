@@ -111,7 +111,7 @@ async def backup_avro(table_name :str):
         client = bigquery.Client()
         dataset_id = "globant-de"
         project = "gentle-coyote-378216"
-        dataset_ref = client.dataset(dataset_id, project=project)
+        dataset_ref = client.dataset(dataset_id)
         table_id = "jobs"
         table_ref = dataset_ref.table(table_id)
         #table_ref = table_id
