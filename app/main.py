@@ -162,10 +162,14 @@ async def write_avro(table_name : str, backup_name : str):
         uri, table_id, job_config=job_config
     )  # Make an API request.
 
-    load_job.result()  # Waits for the job to complete.
+    try:
+        load_job.result()  # Waits for the job to complete.
 
-    destination_table = client.get_table(table_id)
-    print("Loaded {} rows.".format(destination_table.num_rows))
+        destination_table = client.get_table(table_id)
+        print("Loaded {} rows.".format(destination_table.num_rows))
+        
+    except Exception as e:
+        print("Error: {}".format(e))
+        return {"message": "Error inserting Avro files to BigQuery" },401
+    
     return {"message": "Table backed up successfully"}
-    
-    
