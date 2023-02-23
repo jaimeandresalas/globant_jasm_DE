@@ -126,7 +126,7 @@ async def backup_avro(table_name :str):
     return {"message": "Table backed up successfully"}
 
 @app.post("/write_avro")
-async def write_avro(table_name : str, bucket_name : str):
+async def write_avro(table_name : str, backup_name : str):
     dataset_id = "gentle-coyote-378216.globant_de"
     bucket_name = "gs://bucket1_jasm_globant/backup_avro"
     if table_name == "jobs":
@@ -154,6 +154,10 @@ async def write_avro(table_name : str, bucket_name : str):
         write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
     )
     #uri = "gs://cloud-samples-data/bigquery/us-states/us-states.avro"
+    print("Bucket name")
+    print(backup_name)
+    uri = "gs://bucket1_jasm_globant/backup_avro/"+backup_name
+    print(uri)
 
     load_job = client.load_table_from_uri(
         bucket_name, table_id, job_config=job_config
