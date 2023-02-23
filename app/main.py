@@ -95,8 +95,16 @@ async def write_table(data: List[dict], table_name: str):
 @app.post("/backup_avro")
 async def backup_avro(table_name :str):
     dataset_id = "gentle-coyote-378216.globant_de"
+    if table_name == "jobs":
+        table_id = f"{dataset_id}.{table_name}"
+    elif table_name == "departments":
+        table_id = f"{dataset_id}.{table_name}"
+    elif table_name == "hired_employee":
+        table_id = f"{dataset_id}.{table_name}"
+    else:
+        return {"error": "Invalid table name"}
     try: 
-        backup_table(dataset_id, table_name)
+        backup_table(table_id)
     except Exception as e:
         print(e)
         return {"message": "Error backing up table"}
