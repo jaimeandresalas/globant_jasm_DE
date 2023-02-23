@@ -39,7 +39,7 @@ async def write_csv():
         print("Hired Employee inserted successfully")
     except Exception as e:
         print(e)
-        return {"message": "Error inserting CVS files to BigQuery"}
+        return {"message": "Error inserting CVS files to BigQuery" },401
     return {"message": "Transactions inserted CVS files successfully"}
 
 
@@ -63,7 +63,7 @@ async def write_table(data: List[dict], table_name: str):
         table_id = f"{dataset_id}.{table_name}"
         #schema_path = "data/schemas_json/hired_employees.json"
     else:
-        return {"error": "Invalid table name"}
+        return {"error": "Invalid table name"},402
 
     try:
         data_list = [SchemaClass(**d) for d in data]
@@ -89,6 +89,7 @@ async def write_table(data: List[dict], table_name: str):
             print(error)
     
     print(f"Loaded {job.output_rows} rows into BigQuery table {table_id}")
+    return {"message": "Data inserted successfully"}
 
 
 @app.post("/backup_avro")
@@ -138,12 +139,9 @@ async def write_avro(table_name : str, bucket_name : str):
         schema_path = "data/schemas_json/hired_employees.json"
         table_id = f"{dataset_id}.{table_name}"
     else:
-        return {"error": "Invalid table name"}
+        return {"error": "Invalid table name"},402
     # Construct a BigQuery client object.
     client = bigquery.Client()
-
-    # TODO(developer): Set table_id to the ID of the table to create.
-    # table_id = "your-project.your_dataset.your_table_name
 
     #job_config = bigquery.LoadJobConfig(source_format=bigquery.SourceFormat.AVRO)
     schema = client.schema_from_json(schema_path)
@@ -165,5 +163,6 @@ async def write_avro(table_name : str, bucket_name : str):
 
     destination_table = client.get_table(table_id)
     print("Loaded {} rows.".format(destination_table.num_rows))
+    return {"message": "Table backed up successfully"}
     
     
