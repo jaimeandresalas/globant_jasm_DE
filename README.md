@@ -1,2 +1,27 @@
-# globant_jasm_DE
-This project is big data migration to a new database system.
+# Globant Jasm Technical Test for Data Engineer
+
+This project is a knowledge test using Python to create a pipeline for different challenges. The solution uses Python and GCP, especially BigQuery as a warehouse. Finally, it has a Docker implementation in Cloud Run and its CD with Github Actions.
+
+This repository is used to create an MVP for an app or data source that you want to integrate into our system.
+
+## Challenges
+
+- [Challenge 1: Data validation and transformation](challenge_1/)
+- [Challenge 2: Data ingestion and processing](challenge_2/)
+- [Challenge 3: Data visualization](challenge_3/)
+
+## Requirements
+
+- Python 3.8+
+- pip
+- GCP account
+- Docker (optional)
+- Github account (optional)
+
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/jaimeandresalas/globant_jasm_DE.git
+
