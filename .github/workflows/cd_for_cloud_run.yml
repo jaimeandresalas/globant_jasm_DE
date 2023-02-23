@@ -34,16 +34,16 @@ jobs:
       #Build the container and push it to Google Container Registry
       - name: Build and Push Container
         run: |-
-          cd app_mvp
-          docker build -t gcr.io/abi-martech-maz-mex/spotlight-1 .
-          docker tag gcr.io/abi-martech-maz-mex/spotlight-1 gcr.io/abi-martech-maz-mex/spotlight-1
-          docker push gcr.io/abi-martech-maz-mex/spotlight-1
+          cd app
+          docker build -t gcr.io/gentle-coyote-378216/globant_jasm .
+          docker tag gcr.io/gentle-coyote-378216/globant_jasm gcr.io/gentle-coyote-378216/globant_jasm
+          docker push gcr.io/gentle-coyote-378216/globant_jasm
 
       #Deploy the container to Cloud Run
       - name: Deploy to Cloud Run with gcloud 
         run: |-
-          gcloud run deploy spotlight-1 \
+          gcloud run deploy globantjasm \
           --region us-central1 \
-          --image gcr.io/abi-martech-maz-mex/spotlight-1 \
+          --image gcr.io/gentle-coyote-378216/globant_jasm \
           --platform managed \
           --allow-unauthenticated

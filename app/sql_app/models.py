@@ -1,16 +1,16 @@
 from pydantic import BaseModel
 
-class hired_employee(BaseModel):
+class HiredEmployee(BaseModel):
     id: int
     name: str
     datetime: str
     department_id : int
     job_id : int
 
-class departments(BaseModel):
+class Departments(BaseModel):
     id: int
     departament: str
 
-class jobs(BaseModel):
+class Jobs(BaseModel):
     id: int
     job: str

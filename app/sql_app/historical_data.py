@@ -1,15 +1,5 @@
 from google.cloud import bigquery
 
-
-
-# Set the GCS URI for the CSV file
-#uri = "gs://<bucket_name>/<file_path>.csv"
-
-# Set the dataset and table ID where the data will be loaded
-#dataset_id = "<dataset_id>"
-#table_id = "<table_id>"
-
-
 def write_csv_to_bigquery(uri, dataset_id, table_id, schema_path):
     # Create a client object
     client = bigquery.Client()
@@ -19,6 +9,9 @@ def write_csv_to_bigquery(uri, dataset_id, table_id, schema_path):
         autodetect=True,
         source_format=bigquery.SourceFormat.CSV,
         schema=schema,
+        max_bad_records=1000,
+        ignore_unknown_values=False,
+        write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
     )
 
     # Start the job to load data from GCS to BigQuery
@@ -28,6 +21,10 @@ def write_csv_to_bigquery(uri, dataset_id, table_id, schema_path):
 
     # Wait for the job to complete
     load_job.result()
-
+    # Verificamos si hubo errores en la carga
+    if load_job.errors:
+        print(f'Errores en la carga de datos a la tabla f"{dataset_id}.{table_id}":')
+        for error in load_job.errors:
+            print(error)
     print(f"Loaded {load_job.output_rows} rows into BigQuery table {table_id}")
 
