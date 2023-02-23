@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from typing import List
 from sql_app.historical_data import write_csv_to_bigquery
-from sql_app.write_data import write_table
+#from sql_app.write_data import write_table
 from sql_app.models import Jobs, Departments, HiredEmployee
 from pydantic import ValidationError
 from google.cloud import bigquery
