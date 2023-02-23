@@ -30,7 +30,7 @@ def backup_table(table_id):
     # Crear un objeto BytesIO para almacenar los datos en formato AVRO
     output = io.BytesIO()
     # Crear el esquema de la tabla
-    schema = table.schema
+    schema = table.schema.to_json()
     # Escribir los datos en el objeto BytesIO
     fastavro.writer(output, schema, df.to_dict(orient='records'))
     #obtener los datos en bytes
