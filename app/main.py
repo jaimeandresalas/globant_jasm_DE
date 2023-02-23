@@ -6,7 +6,7 @@ from sql_app.models import Jobs, Departments, HiredEmployee
 from pydantic import ValidationError
 from google.cloud import bigquery
 import pandas as pd
-from sql_app.backup_avro import backup_table
+from sql_app.backup_avro import export_table_to_avro
 
 app = FastAPI()
 
@@ -95,6 +95,7 @@ async def write_table(data: List[dict], table_name: str):
 @app.post("/backup_avro")
 async def backup_avro(table_name :str):
     dataset_id = "gentle-coyote-378216.globant_de"
+    bucket_name = "gs://bucket1_jasm_globant/backup_avro"
     if table_name == "jobs":
         table_id = f"{dataset_id}.{table_name}"
     elif table_name == "departments":
@@ -104,7 +105,7 @@ async def backup_avro(table_name :str):
     else:
         return {"error": "Invalid table name"}
     try: 
-        backup_table(table_id)
+        export_table_to_avro(table_id,bucket_name)
     except Exception as e:
         print(e)
         return {"message": "Error backing up table"}
