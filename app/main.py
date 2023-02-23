@@ -105,44 +105,38 @@ async def backup_avro(table_name :str):
         table_id = f"{dataset_id}.{table_name}"
     else:
         return {"error": "Invalid table name"}
-    try: 
-        print("Exporting table to avro")
-        print(table_id)
-        client = bigquery.Client()
-        dataset_id = "globant-de"
-        project = "gentle-coyote-378216"
-        dataset_ref = client.dataset(dataset_id)
-        table_id = "jobs"
-        table_ref = dataset_ref.table(table_id)
-        #table_ref = table_id
-        #table_ref = "gentle-coyote-378216.globant_de.jobs"
-        print(table_ref)
-        job_config = bigquery.job.ExtractJobConfig()
-        job_config.destination_format = bigquery.DestinationFormat.AVRO
-        table_name = table_id.split(".")[-1]
-        current_date = datetime.today().strftime('%Y-%m-%d')
-        filename = f"{current_date}_{table_name}.avro"
-        print(filename)
-        destination_uri = '{}/{}'.format(bucket_name, filename)
-        print(destination_uri)
-        dataset_id = "gentle-coyote-378216.globant_de"
-        print("Data set")
-        print(dataset_id)
-        table_id = "jobs"
-        print("Table id")
-        table_ref = table_ref = f"{dataset_id}.{table_id}"
-        print(table_ref)
-        extract_job = client.extract_table(
-            table_ref,
-            destination_uri,
-            job_config=job_config,
-            )  
-        extract_job.result()    
-        print('Exported {} to {}'.format(table_id, destination_uri))
-        
-        #print()
-        #export_table_to_avro(table_id,bucket_name)
-    except Exception as e:
-        print(e)
-        return {"message": "Error backing up table"}
+
+    client = bigquery.Client()
+    job_config = bigquery.job.ExtractJobConfig()
+    job_config.destination_format = bigquery.DestinationFormat.AVRO
+    table_name = table_id.split(".")[-1]
+    current_date = datetime.today().strftime('%Y-%m-%d')
+    filename = f"{current_date}_{table_name}.avro"
+    destination_uri = '{}/{}'.format(bucket_name, filename)
+    table_ref = table_id
+    print(table_ref)
+    extract_job = client.extract_table(
+        table_ref,
+        destination_uri,
+        job_config=job_config,
+        )  
+    extract_job.result()
+    if extract_job.errors:
+        print(f'Errores en la carga de datos a la tabla "{table_id}":')
+    print('Exported {} to {}'.format(table_id, destination_uri))
     return {"message": "Table backed up successfully"}
+
+@app.post("/write_avro")
+async def write_avro(table_name : str):
+    dataset_id = "gentle-coyote-378216.globant_de"
+    bucket_name = "gs://bucket1_jasm_globant/backup_avro"
+    if table_name == "jobs":
+        table_id = f"{dataset_id}.{table_name}"
+    elif table_name == "departments":
+        table_id = f"{dataset_id}.{table_name}"
+    elif table_name == "hired_employee":
+        table_id = f"{dataset_id}.{table_name}"
+    else:
+        return {"error": "Invalid table name"}
+    
+    
