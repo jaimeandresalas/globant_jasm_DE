@@ -109,10 +109,13 @@ async def backup_avro(table_name :str):
         print("Exporting table to avro")
         print(table_id)
         client = bigquery.Client()
-        #dataset_ref = client.dataset(dataset_id, project=project)
-        #table_ref = dataset_ref.table(table_id)
-        table_ref = table_id
-        table_ref = "gentle-coyote-378216.globant_de.jobs"
+        dataset_id = "globant-de"
+        project = "gentle-coyote-378216"
+        dataset_ref = client.dataset(dataset_id, project=project)
+        table_id = "jobs"
+        table_ref = dataset_ref.table(table_id)
+        #table_ref = table_id
+        #table_ref = "gentle-coyote-378216.globant_de.jobs"
         print(table_ref)
         job_config = bigquery.job.ExtractJobConfig()
         job_config.destination_format = bigquery.DestinationFormat.AVRO
