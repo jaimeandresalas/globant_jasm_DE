@@ -146,7 +146,6 @@ async def write_avro(table_name : str, backup_name : str):
     #job_config = bigquery.LoadJobConfig(source_format=bigquery.SourceFormat.AVRO)
     schema = client.schema_from_json(schema_path)
     job_config = bigquery.LoadJobConfig(
-        autodetect=True,
         source_format=bigquery.SourceFormat.AVRO,
         schema=schema,
         max_bad_records=1000,
@@ -160,7 +159,7 @@ async def write_avro(table_name : str, backup_name : str):
     print(uri)
 
     load_job = client.load_table_from_uri(
-        bucket_name, table_id, job_config=job_config
+        uri, table_id, job_config=job_config
     )  # Make an API request.
 
     load_job.result()  # Waits for the job to complete.
