@@ -1,12 +1,10 @@
 from fastapi import FastAPI
 from typing import List
 from sql_app.historical_data import write_csv_to_bigquery
-#from sql_app.write_data import write_table
 from sql_app.models import Jobs, Departments, HiredEmployee
 from pydantic import ValidationError
 from google.cloud import bigquery
 import pandas as pd
-from sql_app.backup_avro import export_table_to_avro
 from datetime import datetime
 
 app = FastAPI()
@@ -127,16 +125,45 @@ async def backup_avro(table_name :str):
     return {"message": "Table backed up successfully"}
 
 @app.post("/write_avro")
-async def write_avro(table_name : str):
+async def write_avro(table_name : str, bucket_name : str):
     dataset_id = "gentle-coyote-378216.globant_de"
     bucket_name = "gs://bucket1_jasm_globant/backup_avro"
     if table_name == "jobs":
+        schema_path = "data/schemas_json/jobs.json"
         table_id = f"{dataset_id}.{table_name}"
     elif table_name == "departments":
+        schema_path = "data/schemas_json/departments.json"
         table_id = f"{dataset_id}.{table_name}"
     elif table_name == "hired_employee":
+        schema_path = "data/schemas_json/hired_employees.json"
         table_id = f"{dataset_id}.{table_name}"
     else:
         return {"error": "Invalid table name"}
+    # Construct a BigQuery client object.
+    client = bigquery.Client()
+
+    # TODO(developer): Set table_id to the ID of the table to create.
+    # table_id = "your-project.your_dataset.your_table_name
+
+    #job_config = bigquery.LoadJobConfig(source_format=bigquery.SourceFormat.AVRO)
+    schema = client.schema_from_json(schema_path)
+    job_config = bigquery.LoadJobConfig(
+        autodetect=True,
+        source_format=bigquery.SourceFormat.AVRO,
+        schema=schema,
+        max_bad_records=1000,
+        ignore_unknown_values=False,
+        write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
+    )
+    #uri = "gs://cloud-samples-data/bigquery/us-states/us-states.avro"
+
+    load_job = client.load_table_from_uri(
+        bucket_name, table_id, job_config=job_config
+    )  # Make an API request.
+
+    load_job.result()  # Waits for the job to complete.
+
+    destination_table = client.get_table(table_id)
+    print("Loaded {} rows.".format(destination_table.num_rows))
     
     
