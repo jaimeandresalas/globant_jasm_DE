@@ -125,11 +125,17 @@ async def backup_avro(table_name :str):
         print(filename)
         destination_uri = '{}/{}'.format(bucket_name, filename)
         print(destination_uri)
+        dataset_id = "gentle-coyote-378216.globant_de"
+        print("Data set")
+        print(dataset_id)
+        table_id = "jobs"
+        print("Table id")
+        table_ref = table_ref = f"{dataset_id}.{table_id}"
+        print(table_ref)
         extract_job = client.extract_table(
             table_ref,
             destination_uri,
             job_config=job_config,
-            location="EU",
             )  
         extract_job.result()    
         print('Exported {} to {}'.format(table_id, destination_uri))
