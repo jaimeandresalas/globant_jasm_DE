@@ -6,9 +6,9 @@
       "description": "Id of the departament"
     },
     {
-      "name": "departament",
+      "name": "department",
       "type": "STRING",
       "mode": "REQUIRED",
-      "description": "Name of the departament"
+      "description": "Name of the department"
     }
 ]

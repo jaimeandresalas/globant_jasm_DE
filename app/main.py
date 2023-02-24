@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from typing import List
 from sql_app.historical_data import write_csv_to_bigquery
 from sql_app.write_data import write_table
@@ -7,6 +7,7 @@ from pydantic import ValidationError
 from google.cloud import bigquery
 import pandas as pd
 from sql_app.backup_avro import backup_table
+from sql_app.queries import number_employees
 
 app = FastAPI()
 
@@ -104,3 +105,24 @@ async def backup_avro(table_name :str):
         print(e)
         return {"message": "Error backing up table"}
     return {"message": "Table backed up successfully"}
+
+
+@app.get("/number_employee")
+async def get_table_numberemployee():
+    client = bigquery.Client()
+    try:
+        query_job = client.query(number_employees)
+        results = query_job.result()
+        return [dict(row) for row in results]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/hired_more_than_mean")
+async def get_table_hired_more_than_mean():
+    client = bigquery.Client()
+    try:
+        query_job = client.query(hired_more_than_mean)
+        results = query_job.result()
+        return [dict(row) for row in results]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
