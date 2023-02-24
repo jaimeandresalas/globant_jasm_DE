@@ -18,6 +18,10 @@ async def root():
 
 @app.post("/write_csv")
 async def write_csv():
+    """
+    It takes the CSV files from the GCS bucket and inserts them into the BigQuery tables
+    :return: a message with the result of the transaction.
+    """
     dataset_id = "gentle-coyote-378216.globant_de"
     # Set the GCS URI for the CSV file
     uri_departments = "gs://bucket1_jasm_globant/backup_csv/departments.csv"
@@ -49,6 +53,15 @@ async def write_csv():
 # Ruta para insertar datos en las tablas
 @app.post("/insert_data")
 async def write_table(data: List[dict], table_name: str):
+    """
+    It takes a list of dictionaries and a table name, validates the data, and inserts it into BigQuery
+    
+    :param data: List[dict]
+    :type data: List[dict]
+    :param table_name: The name of the table to write to
+    :type table_name: str
+    :return: A dictionary with a message that says that the data was inserted successfully.
+    """
     dataset_id = "gentle-coyote-378216.globant_de"
     client = bigquery.Client()
     # Convertir los datos recibidos a objetos Pydantic
@@ -96,6 +109,13 @@ async def write_table(data: List[dict], table_name: str):
 
 @app.post("/backup_avro")
 async def backup_avro(table_name :str):
+    """
+    It takes a table name as an argument, and exports the table to a bucket in Avro format
+    
+    :param table_name: The name of the table to be backed up
+    :type table_name: str
+    :return: A dictionary with a message
+    """
     dataset_id = "gentle-coyote-378216.globant_de"
     bucket_name = "gs://bucket1_jasm_globant/backup_avro"
     if table_name == "jobs":
@@ -129,6 +149,16 @@ async def backup_avro(table_name :str):
 
 @app.post("/write_avro")
 async def write_avro(table_name : str, backup_name : str):
+    """
+    It takes a table name and a backup name as parameters, and then it loads the backup Avro file from the
+    bucket into the table in BigQuery
+    
+    :param table_name: The name of the table you want to backup
+    :type table_name: str
+    :param backup_name: The name of the backup file
+    :type backup_name: str
+    :return: A dictionary with a message key and a value.
+    """
     dataset_id = "gentle-coyote-378216.globant_de"
     bucket_name = "gs://bucket1_jasm_globant/backup_avro"
     if table_name == "jobs":
@@ -179,6 +209,10 @@ async def write_avro(table_name : str, backup_name : str):
 
 @app.get("/number_employee")
 async def get_table_numberemployee():
+    """
+    It takes the query string, and returns the results of the query as a list of dictionaries
+    :return: The number of employees hired in each year.
+    """
     client = bigquery.Client()
     try:
         query_job = client.query(number_employees)
@@ -189,6 +223,10 @@ async def get_table_numberemployee():
 
 @app.get("/hired_more_than_mean")
 async def get_table_hired_more_than_mean():
+    """
+    It creates a BigQuery client, runs the query, and returns the results
+    :return: A list of dictionaries.
+    """
     client = bigquery.Client()
     try:
         query_job = client.query(hired_more_than_mean)

@@ -5,6 +5,18 @@ from pydantic import ValidationError
 import pandas as pd
 
 def write_table(data: List[dict], table_name: str, dataset_id : str):
+    """
+    It takes a list of dictionaries, a table name, and a dataset id, and then it loads the data into
+    BigQuery
+    
+    :param data: List[dict] - The data to be inserted into BigQuery
+    :type data: List[dict]
+    :param table_name: The name of the table to write to
+    :type table_name: str
+    :param dataset_id: The name of the dataset you want to create
+    :type dataset_id: str
+    :return: A dictionary with the error message.
+    """
     client = bigquery.Client()
     # Convertir los datos recibidos a objetos Pydantic
     if table_name == "jobs":
