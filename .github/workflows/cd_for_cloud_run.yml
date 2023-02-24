@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - main
+      - challenge2
     paths: 
       - "app/**"
 
