@@ -5,8 +5,7 @@ from sql_app.models import Jobs, Departments, HiredEmployee
 from pydantic import ValidationError
 from google.cloud import bigquery
 import pandas as pd
-
-from sql_app.backup_avro import backup_table
+from datetime import datetime
 from sql_app.queries import number_employees, hired_more_than_mean
 
 

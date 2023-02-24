@@ -6,9 +6,9 @@ This repository is used to create an MVP for an app or data source that you want
 
 ## Challenges
 
-- [Challenge 1: Data validation and transformation](challenge_1/)
-- [Challenge 2: Data ingestion and processing](challenge_2/)
-- [Challenge 3: Data visualization](challenge_3/)
+- [Challenge 1: Data validation and transformation step by step guide](.github/.readme/challenge_1.md/)
+- [Challenge 2: Data exploration using BigQuery step by step guide](challenge_2/)
+- [Challenge 3: Data visualization dashboard link](https://lookerstudio.google.com/reporting/ba576c56-9553-4960-8f5c-b32deae3ddee/)
 
 ## Requirements
 
